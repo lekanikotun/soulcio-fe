@@ -49,7 +49,7 @@ export class App {
     this.nav.setRoot(page.component);
   }
 
-  isActive(page) {
+  /*isActive(page) {
     // Again the Tabs Navigation
     let childNav = this.nav.getActiveChildNav();
     
@@ -65,6 +65,6 @@ export class App {
       return 'primary';
     }
     return;
-  }
+  }*/
   
 }
