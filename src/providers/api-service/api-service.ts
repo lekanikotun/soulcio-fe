@@ -3,43 +3,46 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-// import { Observable } from 'rxjs/Observable';
+import { config } from '../../environments/environment.dev';
 import { catchError, retry } from 'rxjs/operators';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
-export class ApiServiceProvider {
+export class ApiService {
+  
+  baseUrl: string;
 
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient) {
+    this.baseUrl = `${config.apiHost}:${config.apiPort}/${config.apiBase}`;
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error.message);
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
       console.error(
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
     }
-    // return an ErrorObservable with a user-facing error message
+    
     return new ErrorObservable(
       'Something bad happened; please try again later.');
   };
 
-  public get(url: string) {
-    return this.http.get(url)
-      .pipe(
-        retry(3), // retry a failed request up to 3 times
-        catchError(this.handleError) // then handle the error
-      );
+  public get(uri: string) {
+    let url = `${this.baseUrl}/${uri}`;
+    return this.http.get(url, { observe: 'response' })
+    .pipe(
+     retry(3),
+     catchError(this.handleError)
+     );
   }
 
-  public post(url: string, data: any, headerOptions) {
+  public post(uri: string, data: any, headerOptions = {}) {
+    let url = `${config.apiHost}:${config.apiPort}/${config.apiBase}/${uri}`;
     return this.http.post(url, data, headerOptions)
       .pipe(
-        retry(3), // retry a failed request up to 3 times
+        retry(3),
         catchError(this.handleError)
       );
   }

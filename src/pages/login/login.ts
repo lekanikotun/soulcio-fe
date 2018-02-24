@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, LoadingController, Loading, IonicPage } from 'ionic-angular';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../providers/auth-service/auth-service';
+import { ApiService } from '../../providers/api-service/api-service';
 import { HomePage } from '../home/home';
 import { RegisterPage } from '../register/register';
 
@@ -12,22 +14,50 @@ import { RegisterPage } from '../register/register';
 export class LoginPage {
   loading: Loading;
   registerCredentials = { email: '', password: '' };
+  
+  form;
 
-  constructor(private nav: NavController,
+  constructor(
+    private nav: NavController,
     private auth: AuthService,
+    private api: ApiService,
+    private fb: FormBuilder,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController) { }
+    
+  ionViewDidLoad() {
+    this.api.get('login')
+        .subscribe(
+          res => {
+            this.form = this.fb.group({
+              email: this.fb.control('', Validators.compose([
+               Validators.required,
+               Validators.email
+               ])),
+              // email: this.fb.control('', Validators.required),
+              password: this.fb.control('', Validators.required)
+            });
+          },
+          error => {
+            console.log('Error', error);
+          }
+        )
+    
+  }
 
   public createAccount() {
     this.nav.push(RegisterPage);
   }
 
-  public login() {
-    this.showLoading();
-    this.auth.login(this.registerCredentials)
-      .subscribe(allowed => {
-        if (allowed) {
-          this.nav.setRoot(HomePage);
+  public login(value) {
+    console.log('VALUE', value);
+    this.registerCredentials = value;
+    // this.showLoading();
+    this.api.post('login', this.registerCredentials)
+      .subscribe(res => {
+        console.log('res.headers', res.headers);
+        if (res) {
+          this.nav.setRoot(HomePage, { user: res.data });
         } else {
           this.showError("Access Denied");
         }
