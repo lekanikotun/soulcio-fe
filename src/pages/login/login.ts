@@ -3,7 +3,7 @@ import { NavController, AlertController, LoadingController, Loading, IonicPage }
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { ApiService } from '../../providers/api-service/api-service';
-import { HomePage } from '../home/home';
+import { TabsPage } from '../tabs/tabs';
 import { RegisterPage } from '../register/register';
 
 @IonicPage()
@@ -50,14 +50,13 @@ export class LoginPage {
   }
 
   public login(value) {
-    console.log('VALUE', value);
     this.registerCredentials = value;
     // this.showLoading();
     this.api.post('login', this.registerCredentials)
       .subscribe(res => {
         console.log('res.headers', res.headers);
         if (res) {
-          this.nav.setRoot(HomePage, { user: res.data });
+          this.nav.setRoot(TabsPage, { user: res.data });
         } else {
           this.showError("Access Denied");
         }

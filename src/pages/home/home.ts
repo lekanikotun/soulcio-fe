@@ -17,7 +17,7 @@ export class HomePage {
     private auth: AuthService,
     public navParams: NavParams
   ) {
-    this.user = this.navParams.get('user');
+    this.user = navParams.data;
   }
   
   public logout() {

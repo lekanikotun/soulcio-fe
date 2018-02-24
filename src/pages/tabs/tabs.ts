@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavParams } from 'ionic-angular';
 
 import { AboutPage } from '../about/about';
 import { ContactPage } from '../contact/contact';
@@ -12,8 +13,10 @@ export class TabsPage {
   tab1Root = HomePage;
   tab2Root = AboutPage;
   tab3Root = ContactPage;
+  
+  userData: any;
 
-  constructor() {
-
+  constructor(navParams: NavParams) {
+    this.userData = navParams.get('user');
   }
 }
