@@ -16,7 +16,7 @@ export class App {
   @ViewChild(Nav) nav: Nav;
   
   rootPage:any = LoginPage;
-  pages: Array<{title: string, component: any, data: any}>;
+  pages: Array<{title: string, component: any, icon: string}>;
   homeData: any;
   
   constructor(
@@ -25,13 +25,11 @@ export class App {
     public splashScreen: SplashScreen
   ) {
     this.initializeApp();
-    // this.homeData = this.navParams.get('user');
-    
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage, data: {} },
-      { title: 'About', component: AboutPage, data: {} },
-      { title: 'Contact', component: ContactPage, data: {} }
+      { title: 'Home', component: HomePage, icon: 'home' },
+      { title: 'About', component: AboutPage, icon: 'about' },
+      { title: 'Contact', component: ContactPage, icon: 'contact' }
     ];
     this.splashScreen.hide();
   }
@@ -50,4 +48,23 @@ export class App {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+  isActive(page) {
+    // Again the Tabs Navigation
+    let childNav = this.nav.getActiveChildNav();
+    
+    if (childNav) {
+      if (childNav.getSelected() && childNav.getSelected().root === page.tabComponent) {
+        return 'primary';
+      }
+      return;
+    }
+    
+    // Fallback needed when there is no active childnav (tabs not active)
+    if (this.nav.getActive() && this.nav.getActive().name === page.pageName) {
+      return 'primary';
+    }
+    return;
+  }
+  
 }
