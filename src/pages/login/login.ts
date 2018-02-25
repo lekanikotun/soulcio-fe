@@ -14,7 +14,6 @@ import { RegisterPage } from '../register/register';
 })
 export class LoginPage {
   loading: Loading;
-  registerCredentials = { email: '', password: '' };
   
   form;
 
@@ -50,17 +49,10 @@ export class LoginPage {
     this.navCtrl.push(RegisterPage);
   }
 
-  public login(value) {
-    this.registerCredentials = value;
-    // this.showLoading();
-    this.api.post('login', this.registerCredentials)
+  public login(credentials) {
+    this.auth.login(credentials)
       .subscribe(res => {
-        console.log('res.headers', res.headers);
-        if (res) {
-          this.navCtrl.setRoot(MenuPage, { user: res.data });
-        } else {
-          this.showError("Access Denied");
-        }
+        this.navCtrl.setRoot(MenuPage, { user: res.data });
       },
       error => {
         this.showError(error);

@@ -15,8 +15,10 @@ export class TabsPage {
   tab2Root = AboutPage;
   tab3Root = ContactPage;
   tabIndex: number;
+  userData: any;
   
   constructor(navParams: NavParams) {
+    this.userData = (navParams.data);
     this.tabIndex = navParams.data.tabIndex || 0;
   }
 }

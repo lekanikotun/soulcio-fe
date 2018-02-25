@@ -4,7 +4,10 @@ import { IonicPage, Nav, NavController, NavParams } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 import { HomePage } from '../home/home';
 import { AboutPage } from '../about/about';
+import { LoginPage } from '../login/login';
 import { ContactPage } from '../contact/contact';
+
+import { AuthService } from '../../providers/auth-service/auth-service';
 
 /**
  * Generated class for the MenuPage page.
@@ -15,6 +18,7 @@ import { ContactPage } from '../contact/contact';
 
 export interface PageInterface {
   title: string;
+  pageName?: string;
   component?: any;
   tabComponent?: any;
   index?: number;
@@ -38,14 +42,16 @@ export class MenuPage {
   
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams
+    public navParams: NavParams,
+    public auth: AuthService
   ) {
     this.userData = navParams.get('user');
   
     this.pages = [
-      { title: 'Home', tabComponent: TabsPage, component: HomePage, index: 0, icon: 'home' },
-      { title: 'About', tabComponent: TabsPage,  component: AboutPage, index: 1, icon: 'about' },
-      { title: 'Contact', tabComponent: TabsPage, component: ContactPage, index: 2, icon: 'contact' }
+      { title: 'Home', tabComponent: TabsPage, component: HomePage, pageName: 'HomePage', index: 0, icon: 'home' },
+      { title: 'About', tabComponent: TabsPage,  component: AboutPage, pageName: 'AboutPage', index: 1, icon: 'about' },
+      { title: 'Contact', tabComponent: TabsPage, component: ContactPage, pageName: 'ContactPage', index: 2, icon: 'contact' },
+      { title: 'Logout', component: LoginPage, icon: 'contact' }
     ];
   }
 
@@ -59,14 +65,19 @@ export class MenuPage {
     // The index is equal to the order of our tabs inside tabs.ts
     if (typeof page.index !== 'undefined') {
       if (page.title === 'Home') {
-        params = Object.assign({tabIndex: page.index}, this.userData)
+        params = Object.assign({tabIndex: page.index}, this.userData);
       } else {
         params = { tabIndex: page.index };
       }
     }
   
     // The active child nav is our Tabs Navigation
-    if (this.nav.getActiveChildNav() && typeof page.index != undefined) {
+    if (page.title === 'Logout') {
+      this.auth.logout()
+      .subscribe(succ => {
+        this.nav.setRoot(LoginPage);
+      });
+    } else  if (this.nav.getActiveChildNav() && typeof page.index != undefined) {
       this.nav.getActiveChildNav().select(page.index);
     } else {
       // Tabs are not active, so reset the root page
@@ -80,7 +91,7 @@ export class MenuPage {
     let childNav = this.nav.getActiveChildNav();
     
     if (childNav) {
-      if (childNav.getSelected() && childNav.getSelected().root === page.tabComponent) {
+      if (childNav.getSelected() && childNav.getSelected().root === page.pageName) {
         return 'primary';
       }
       return;
