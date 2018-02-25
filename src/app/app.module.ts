@@ -10,6 +10,7 @@ import { RegisterPage } from '../pages/register/register';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { MenuPage } from '../pages/menu/menu';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -24,6 +25,7 @@ import { ApiService } from '../providers/api-service/api-service';
     AboutPage,
     ContactPage,
     HomePage,
+    MenuPage,
     TabsPage
   ],
   imports: [
@@ -39,6 +41,7 @@ import { ApiService } from '../providers/api-service/api-service';
     AboutPage,
     ContactPage,
     HomePage,
+    MenuPage,
     TabsPage
   ],
   providers: [

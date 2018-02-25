@@ -3,7 +3,8 @@ import { NavController, AlertController, LoadingController, Loading, IonicPage }
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { ApiService } from '../../providers/api-service/api-service';
-import { TabsPage } from '../tabs/tabs';
+
+import { MenuPage } from '../menu/menu';
 import { RegisterPage } from '../register/register';
 
 @IonicPage()
@@ -18,7 +19,7 @@ export class LoginPage {
   form;
 
   constructor(
-    private nav: NavController,
+    private navCtrl: NavController,
     private auth: AuthService,
     private api: ApiService,
     private fb: FormBuilder,
@@ -46,7 +47,7 @@ export class LoginPage {
   }
 
   public createAccount() {
-    this.nav.push(RegisterPage);
+    this.navCtrl.push(RegisterPage);
   }
 
   public login(value) {
@@ -56,7 +57,7 @@ export class LoginPage {
       .subscribe(res => {
         console.log('res.headers', res.headers);
         if (res) {
-          this.nav.setRoot(TabsPage, { user: res.data });
+          this.navCtrl.setRoot(MenuPage, { user: res.data });
         } else {
           this.showError("Access Denied");
         }

@@ -17,6 +17,7 @@ export class HomePage {
     private auth: AuthService,
     public navParams: NavParams
   ) {
+    console.log('navParams.data;', navParams.data);
     this.user = navParams.data;
   }
   
