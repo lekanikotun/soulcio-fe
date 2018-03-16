@@ -17,6 +17,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthService } from '../providers/auth-service/auth-service';
 import { ApiService } from '../providers/api-service/api-service';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './../providers/auth-service/token.interceptor';
+
 @NgModule({
   declarations: [
     App,
@@ -45,6 +48,11 @@ import { ApiService } from '../providers/api-service/api-service';
     TabsPage
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},

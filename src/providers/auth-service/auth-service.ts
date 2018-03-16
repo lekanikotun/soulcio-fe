@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
+import * as moment from "moment";
+
 import { ApiService } from '../api-service/api-service';
 
 export class User {
@@ -20,21 +22,18 @@ export class AuthService {
   
   constructor( private api: ApiService) { }
   
+  private setSession(authResult) {
+    // const expiresAt = moment().add(authResult.expiresIn,'second');
+    localStorage.setItem('id_token', authResult.data.token);
+    // localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
+  }
+  
   public login(credentials) {
     if (credentials.email === null || credentials.password === null) {
       return Observable.throw("Please insert credentials");
     }
-  
-    return this.api.post('login', credentials);
-      /*.subscribe(res => {
-        return res.data
-      },
-      error => {
-      // TODO: Handle error
-        console.log('Login Error', error);
-        return error;
-      });*/
-    
+    return this.api.post('login', credentials)
+      .do(this.setSession);
   }
 
   public register(credentials) {

@@ -45,7 +45,10 @@ export class MenuPage {
     public navParams: NavParams,
     public auth: AuthService
   ) {
-    this.userData = navParams.get('user');
+    let data = navParams.get('user');
+    this.userData = data.user;
+    
+    console.log('userData', this.userData);
   
     this.pages = [
       { title: 'Home', tabComponent: TabsPage, component: HomePage, pageName: 'HomePage', index: 0, icon: 'home' },

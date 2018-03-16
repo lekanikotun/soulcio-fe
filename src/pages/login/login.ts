@@ -33,7 +33,7 @@ export class LoginPage {
               email: this.fb.control('', Validators.compose([
                Validators.required,
                Validators.email
-               ])),
+              ])),
               // email: this.fb.control('', Validators.required),
               password: this.fb.control('', Validators.required)
             });
@@ -68,7 +68,7 @@ export class LoginPage {
   }
 
   showError(text) {
-    this.loading.dismiss();
+    // this.loading.dismiss();
 
     let alert = this.alertCtrl.create({
       title: 'Fail',
